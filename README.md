@@ -1,6 +1,7 @@
 Recipe App
 
 Requirements
+
 The application MUST use an implementation of React Native through EXPO or NATIVE CLI.
 The application MUST implement hooks like states and props.
 The application MUST retrieve and update data from and to an external database like Firebase or another API of your choice. 
