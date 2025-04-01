@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons'; // Import icon for the eye toggle
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
@@ -16,6 +17,7 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
+  const [secureText, setSecureText] = useState(true); 
 
   const handleLogin = async () => {
     try {
@@ -66,13 +68,19 @@ export default function LoginScreen({ navigation }) {
         autoCapitalize="none"
       />
 
-      <TextInput
-        placeholder="Enter your password"
-        value={password}
-        secureTextEntry
-        onChangeText={setPassword}
-        style={styles.input}
-      />
+      {/* Password Input with Show/Hide Icon */}
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="Enter your password"
+          value={password}
+          secureTextEntry={secureText}
+          onChangeText={setPassword}
+          style={styles.passwordInput}
+        />
+        <TouchableOpacity onPress={() => setSecureText(!secureText)} style={styles.eyeIcon}>
+          <Ionicons name={secureText ? "eye-off" : "eye"} size={24} color="#7f8c8d" />
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
@@ -149,6 +157,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
     backgroundColor: "#ecf0f1",
+  },
+  passwordContainer: {
+    width: "100%",
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#bdc3c7",
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    backgroundColor: "#ecf0f1",
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    height: "100%",
+  },
+  eyeIcon: {
+    padding: 10,
   },
   loginButton: {
     width: "100%",
@@ -227,4 +254,3 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
 });
-
