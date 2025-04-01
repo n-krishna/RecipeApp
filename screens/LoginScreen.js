@@ -35,7 +35,7 @@ export default function LoginScreen({ navigation }) {
 
     try {
       await sendPasswordResetEmail(auth, resetEmail);
-      Alert.alert("Success", "Password reset email sent!");
+      Alert.alert("Success", "Password reset email sent! Check your inbox.");
       setModalVisible(false); // Close modal after success
       setResetEmail(""); // Clear the email input
     } catch (error) {
