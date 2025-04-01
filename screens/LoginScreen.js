@@ -23,7 +23,16 @@ export default function LoginScreen({ navigation }) {
       Alert.alert("Success", "Logged in successfully!");
       navigation.replace("Home");
     } catch (error) {
-      Alert.alert("Login Failed", error.message);
+      if (
+        error.code === "auth/user-not-found" || 
+        error.code === "auth/wrong-password" || 
+        error.code === "auth/invalid-credential" ||
+        error.code === "auth/invalid-email"
+      ) {
+        Alert.alert("Invalid username or password", "Please check your credentials and try again.");
+      } else {
+        Alert.alert("Login Failed", "Something went wrong. Please try again later.");
+      }
     }
   };
 
@@ -39,7 +48,7 @@ export default function LoginScreen({ navigation }) {
       setModalVisible(false); // Close modal after success
       setResetEmail(""); // Clear the email input
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", "Something went wrong. Please check your email and try again.");
     }
   };
 
