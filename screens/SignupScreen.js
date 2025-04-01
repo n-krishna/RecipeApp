@@ -78,12 +78,25 @@ export default function SignupScreen({ navigation }) {
         country,
       });
 
-      // ✅ Success Alert & Navigation
+      // ✅ Success Alert and navigate only after user presses OK
       Alert.alert("Success", "Account created successfully!", [
-        { text: "OK", onPress: () => navigation.replace("Home") },
+        {
+          text: "OK",
+          onPress: () => navigation.replace("Home"),
+        },
       ]);
     } catch (error) {
-      Alert.alert("Signup Failed", error.message);
+      let message = "Something went wrong. Please try again.";
+
+      if (error.code === "auth/email-already-in-use") {
+        message = "This email is already registered. Please use a different one or log in.";
+      } else if (error.code === "auth/invalid-email") {
+        message = "Invalid email address.";
+      } else if (error.code === "auth/weak-password") {
+        message = "Password should be at least 6 characters.";
+      }
+
+      Alert.alert("Signup Failed", message);
     }
   };
 
@@ -200,6 +213,24 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 50,
+  },
+  countryCodeInput: {
+    width: 50,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderRightColor: "#ccc",
+    marginRight: 10,
+  },
+  phoneInput: {
+    flex: 1,
+    height: 50,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    alignSelf: "flex-start",
+    marginBottom: 5,
+    marginLeft: 5,
   },
   signupButton: {
     width: "90%",
