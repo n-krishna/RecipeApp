@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#2c3e50",
+    color: "#ffffff", // changed from #2c3e50
     marginBottom: 5,
   },
   subtitle: {
     fontSize: 16,
-    color: "#7f8c8d",
+    color: "#ffffff", // changed from #7f8c8d
     marginBottom: 20,
   },
   input: {
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
     backgroundColor: "#F0EAD2",
+    color: "#1B4217", // optional: explicit for contrast
   },
   passwordContainer: {
     width: "100%",
@@ -173,6 +174,7 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     height: "100%",
+    color: "#1B4217", // optional
   },
   eyeIcon: {
     padding: 10,
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     marginTop: 15,
-    color: "#3498db",
+    color: "#ffffff", 
     fontSize: 16,
   },
   /* Modal Styling */
