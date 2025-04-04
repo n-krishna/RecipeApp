@@ -28,8 +28,7 @@ const HomeScreen = () => {
         let recipeRef = collection(db, "recipes");
 
         if (category.trim() !== "") {
-          const lowerCaseCategory = category.trim().toLowerCase();
-          recipeRef = query(recipeRef, where("category", "==", lowerCaseCategory));
+          recipeRef = query(recipeRef, where("category", "==", category));
         }
 
         const querySnapshot = await getDocs(recipeRef);
@@ -38,7 +37,6 @@ const HomeScreen = () => {
           ...doc.data()
         }));
 
-        console.log("Fetched Recipes:", recipesList); // 🔍 Debug log
         setRecipes(recipesList);
       } catch (error) {
         console.error("Error fetching recipes:", error);
@@ -70,10 +68,10 @@ const HomeScreen = () => {
         <Text style={styles.searchLabel}>Search Category:</Text>
         <TextInput
           style={styles.searchInput}
-          placeholder="Type category (e.g., veg, dessert)..."
+          placeholder="Type category (e.g., Veg, Dessert)..."
           placeholderTextColor="#777"
           value={category}
-          onChangeText={(text) => setCategory(text.toLowerCase())}
+          onChangeText={setCategory}
         />
       </View>
 
@@ -120,6 +118,7 @@ const styles = StyleSheet.create({
   bold: { fontWeight: "900", color: "#FFB84D" },
   loader: { marginTop: 20 },
   emptyMessage: { textAlign: "center", fontSize: 18, color: "#EEE", marginTop: 20 },
+
   searchContainer: { marginBottom: 15 },
   searchLabel: { fontSize: 16, fontWeight: "bold", marginBottom: 5, color: "#F0EAD2" },
   searchInput: {
@@ -131,6 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     color: "#000"
   },
+
   recipeCard: {
     flexDirection: "row",
     backgroundColor: "#F0EAD2",
