@@ -182,7 +182,7 @@ export default function SignupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#1B4217", 
   },
   scrollContainer: {
     flexGrow: 1,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#F0EAD2",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
