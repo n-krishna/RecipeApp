@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#1B4217",
     paddingHorizontal: 20,
   },
   title: {
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#F0EAD2",
   },
   passwordContainer: {
     width: "100%",
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 15,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#F0EAD2",
     marginBottom: 15,
   },
   passwordInput: {
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "90%",
-    backgroundColor: "#fff",
+    backgroundColor: "#F0EAD2",
     borderRadius: 15,
     padding: 20,
     alignItems: "center",
