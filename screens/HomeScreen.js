@@ -13,9 +13,15 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+  const handleAddRecipe = () => {
+    navigation.navigate("AddRecipe");
+  };
+
   return (
     <View style={{ padding: 20 }}>
       <Text>Welcome to the Recipe App!</Text>
+      <Button title="Add New Recipe" onPress={handleAddRecipe} />
+      <View style={{ marginVertical: 10 }} />
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );
