@@ -182,7 +182,7 @@ export default function SignupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#1B4217",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -193,14 +193,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#2c3e50",
+    color: "#ffffff", 
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#F0EAD2",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
@@ -213,6 +213,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 50,
+    color: "#1B4217",
   },
   countryCodeInput: {
     width: 50,
@@ -220,10 +221,12 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: "#ccc",
     marginRight: 10,
+    color: "#1B4217",
   },
   phoneInput: {
     flex: 1,
     height: 50,
+    color: "#1B4217",
   },
   errorText: {
     color: "red",
@@ -248,7 +251,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     marginTop: 15,
-    color: "#2c3e50",
+    color: "#ffffff", 
     fontSize: 16,
   },
 });

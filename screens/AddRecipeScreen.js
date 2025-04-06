@@ -7,11 +7,12 @@ const AddRecipeScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [imageUrl, setImageUrl] = useState(''); // ✅ New State
+  const [imageUrl, setImageUrl] = useState('');
+  const [category, setCategory] = useState(''); // ✅ New state
 
   const handleAddRecipe = async () => {
-    if (!title || !ingredients || !instructions) {
-      Alert.alert("All fields are required!");
+    if (!title || !ingredients || !instructions || !category) {
+      Alert.alert("All fields are required (except image).");
       return;
     }
 
@@ -20,15 +21,18 @@ const AddRecipeScreen = ({ navigation }) => {
         title,
         ingredients,
         instructions,
-        imageUrl, // ✅ New Field
+        imageUrl,
+        category, // ✅ Included in Firestore
         userId: auth.currentUser.uid,
         createdAt: new Date()
       });
+
       Alert.alert("Recipe added successfully!");
       setTitle('');
       setIngredients('');
       setInstructions('');
-      setImageUrl(''); // ✅ Clear image input too
+      setImageUrl('');
+      setCategory(''); // ✅ Clear field after submit
       navigation.goBack();
     } catch (error) {
       console.error("Error adding recipe: ", error);
@@ -49,6 +53,9 @@ const AddRecipeScreen = ({ navigation }) => {
 
       <Text style={styles.label}>Image URL (optional)</Text>
       <TextInput value={imageUrl} onChangeText={setImageUrl} style={styles.input} />
+
+      <Text style={styles.label}>Category (e.g., Veg, Dessert, Main)</Text>
+      <TextInput value={category} onChangeText={setCategory} style={styles.input} />
 
       <Button title="Add Recipe" onPress={handleAddRecipe} />
     </ScrollView>
