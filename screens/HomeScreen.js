@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -22,30 +22,26 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      setLoading(true);
-      try {
-        let recipeRef = collection(db, "recipes");
+    setLoading(true);
 
-        if (category.trim() !== "") {
-          recipeRef = query(recipeRef, where("category", "==", category));
-        }
+    let recipeRef = collection(db, "recipes");
+    if (category.trim() !== "") {
+      recipeRef = query(recipeRef, where("category", "==", category));
+    }
 
-        const querySnapshot = await getDocs(recipeRef);
-        const recipesList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+    const unsubscribe = onSnapshot(recipeRef, (querySnapshot) => {
+      const recipesList = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setRecipes(recipesList);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching recipes:", error);
+      setLoading(false);
+    });
 
-        setRecipes(recipesList);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRecipes();
+    return () => unsubscribe();
   }, [category]);
 
   const handleLogout = async () => {
@@ -90,27 +86,26 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.categoryGrid}>
-  {categories.map((cat) => (
-    <TouchableOpacity
-      key={cat}
-      style={[
-        styles.categoryCard,
-        category === (cat === "All" ? "" : cat) && styles.categoryCardSelected
-      ]}
-      onPress={() => setCategory(cat === "All" ? "" : cat)}
-    >
-      <Text
-        style={[
-          styles.categoryText,
-          category === (cat === "All" ? "" : cat) && styles.categoryTextSelected
-        ]}
-      >
-        {cat}
-      </Text>
-    </TouchableOpacity>
-  ))}
-</View>
-
+        {categories.map((cat) => (
+          <TouchableOpacity
+            key={cat}
+            style={[
+              styles.categoryCard,
+              category === (cat === "All" ? "" : cat) && styles.categoryCardSelected
+            ]}
+            onPress={() => setCategory(cat === "All" ? "" : cat)}
+          >
+            <Text
+              style={[
+                styles.categoryText,
+                category === (cat === "All" ? "" : cat) && styles.categoryTextSelected
+              ]}
+            >
+              {cat}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
       {/* Recipe List */}
       {loading ? (
@@ -237,7 +232,6 @@ const styles = StyleSheet.create({
     color: "#555",
     marginTop: 4
   },
-  
   categoryGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -245,7 +239,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 12,
   },
-  
   categoryCard: {
     backgroundColor: "#FFF5E0",
     width: "30%",
@@ -261,17 +254,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#FFB84D",
   },
-  
   categoryCardSelected: {
     backgroundColor: "#FFB84D",
   },
-  
   categoryText: {
     color: "#1B4217",
     fontWeight: "bold",
     fontSize: 15
   },
-  
   categoryTextSelected: {
     color: "#1B4217"
   }
