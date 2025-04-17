@@ -25,13 +25,13 @@ const AddRecipeScreen = ({ navigation }) => {
     }
 
     try {
-      await addDoc(collection(db, 'recipes'), {
+      await addDoc(collection(db, "recipes"), {
         title,
         ingredients,
         instructions,
-        imageUrl,
         category,
-        userId: auth.currentUser.uid,
+        imageUrl,
+        userId: auth.currentUser.uid, 
         createdAt: new Date()
       });
 

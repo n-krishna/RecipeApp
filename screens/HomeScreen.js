@@ -14,12 +14,12 @@ import {
 } from "react-native";
 import { auth, db } from "../firebaseConfig";
 
-const categories = ["All", "Veg", "Non-Veg", "Starter", "Drinks","Dessert"];
+const categories = ["All", "Veg", "Non-Veg", "Starter", "Drinks", "Dessert"];
 const HomeScreen = () => {
   const [recipes, setRecipes] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigation = useNavigation();
 
@@ -31,17 +31,21 @@ const HomeScreen = () => {
       recipeRef = query(recipeRef, where("category", "==", category));
     }
 
-    const unsubscribe = onSnapshot(recipeRef, (querySnapshot) => {
-      const recipesList = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setRecipes(recipesList);
-      setLoading(false);
-    }, (error) => {
-      console.error("Error fetching recipes:", error);
-      setLoading(false);
-    });
+    const unsubscribe = onSnapshot(
+      recipeRef,
+      (querySnapshot) => {
+        const recipesList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRecipes(recipesList);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching recipes:", error);
+        setLoading(false);
+      }
+    );
 
     return () => unsubscribe();
   }, [category]);
@@ -61,33 +65,38 @@ const HomeScreen = () => {
 
   const handleNavigateToProfile = () => {
     navigation.navigate("Profile");
-  }
+  };
 
-  const filteredRecipes = recipes.filter(recipe => {
+  const filteredRecipes = recipes.filter((recipe) => {
     const search = searchTerm.trim().toLowerCase();
     const title = recipe?.title?.toLowerCase() || "";
     const category = recipe?.category?.toLowerCase() || "";
     return title.includes(search) || category.includes(search);
   });
-  
-  
 
   return (
     <View style={styles.container}>
       {/* Heading */}
-      <Text style={styles.heading}>🍽️ <Text style={styles.bold}>Recipe List</Text></Text>
+      <Text style={styles.heading}>
+        🍽️ <Text style={styles.bold}>Recipe List</Text>
+      </Text>
 
-      {/* Button Row */}
-      <View style={styles.buttonRow}>
-        <TouchableOpacity onPress={handleLogout} style={styles.cardButton}>
-          <Text style={styles.cardButtonText}>Logout</Text>
+      {/* Updated Button Grid */}
+      <View style={styles.navGrid}>
+        <TouchableOpacity onPress={handleLogout} style={styles.navButton}>
+          <Text style={styles.navButtonText}>Logout</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleAddRecipe} style={styles.cardButton}>
-          <Text style={styles.cardButtonText}>Add New Recipe</Text>
+        <TouchableOpacity onPress={handleAddRecipe} style={styles.navButton}>
+          <Text style={styles.navButtonText}>Add Recipe</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleNavigateToProfile} style={styles.cardButton}>
-          <Text style={styles.cardButtonText}>Profile</Text>
+
+        <TouchableOpacity onPress={handleNavigateToProfile} style={styles.navButton}>
+          <Text style={styles.navButtonText}>Profile</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("MyRecipes")} style={styles.navButton}>
+          <Text style={styles.navButtonText}>My Recipes</Text>
         </TouchableOpacity>
       </View>
 
@@ -109,14 +118,14 @@ const HomeScreen = () => {
             key={cat}
             style={[
               styles.categoryCard,
-              category === (cat === "All" ? "" : cat) && styles.categoryCardSelected
+              category === (cat === "All" ? "" : cat) && styles.categoryCardSelected,
             ]}
             onPress={() => setCategory(cat === "All" ? "" : cat)}
           >
             <Text
               style={[
                 styles.categoryText,
-                category === (cat === "All" ? "" : cat) && styles.categoryTextSelected
+                category === (cat === "All" ? "" : cat) && styles.categoryTextSelected,
               ]}
             >
               {cat}
@@ -127,9 +136,9 @@ const HomeScreen = () => {
 
       {loading ? (
         <ActivityIndicator size="large" color="#FFB84D" style={styles.loader} />
-        ) : filteredRecipes.length === 0 ? (
-          <Text style={styles.emptyMessage}>No recipes found!</Text>
-        ) : (
+      ) : filteredRecipes.length === 0 ? (
+        <Text style={styles.emptyMessage}>No recipes found!</Text>
+      ) : (
         <FlatList
           data={filteredRecipes}
           keyExtractor={(item) => item.id}
@@ -148,7 +157,6 @@ const HomeScreen = () => {
           )}
         />
       )}
-
     </View>
   );
 };
@@ -157,54 +165,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8F1E4",
-    padding: 20
+    padding: 20,
   },
   heading: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#3C3C3C",
     textAlign: "center",
-    marginBottom: 20
+    marginBottom: 20,
   },
   bold: {
-    color: "#FFB84D"
+    color: "#FFB84D",
   },
-  buttonRow: {
+
+  // ✅ Updated grid-style buttons
+  navGrid: {
     flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 15
+    marginBottom: 20,
+    gap: 10,
   },
-  cardButton: {
+  navButton: {
     backgroundColor: "#F0EAD2",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    flex: 1,
-    marginHorizontal: 5,
-    alignItems: "center"
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    flexBasis: "48%",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  cardButtonText: {
+  navButtonText: {
     color: "#1B4217",
     fontSize: 16,
-    fontWeight: "600"
+    fontWeight: "bold",
+    textAlign: "center",
   },
+
   loader: {
-    marginTop: 20
+    marginTop: 20,
   },
   emptyMessage: {
     textAlign: "center",
     fontSize: 18,
     color: "#EEE",
-    marginTop: 20
+    marginTop: 20,
   },
   searchContainer: {
-    marginBottom: 15
+    marginBottom: 15,
   },
   searchLabel: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#1B4217"
+    color: "#1B4217",
   },
   searchInput: {
     borderWidth: 1,
@@ -213,7 +232,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     backgroundColor: "#FFFFFF",
-    color: "#000"
+    color: "#000",
   },
   recipeCard: {
     flexDirection: "row",
@@ -228,27 +247,27 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     padding: 10,
     alignItems: "center",
-    flex: 1, 
+    flex: 1,
   },
   recipeImage: {
     width: 100,
     height: 100,
     borderRadius: 10,
-    marginRight: 15
+    marginRight: 15,
   },
   recipeText: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   recipeTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#1B4217"
+    color: "#1B4217",
   },
   recipeCategory: {
     fontSize: 14,
     color: "#555",
-    marginTop: 4
+    marginTop: 4,
   },
   categoryGrid: {
     flexDirection: "row",
@@ -278,11 +297,11 @@ const styles = StyleSheet.create({
   categoryText: {
     color: "#1B4217",
     fontWeight: "bold",
-    fontSize: 15
+    fontSize: 15,
   },
   categoryTextSelected: {
-    color: "#1B4217"
-  }
+    color: "#1B4217",
+  },
 });
 
 export default HomeScreen;
