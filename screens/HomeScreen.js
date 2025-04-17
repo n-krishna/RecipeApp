@@ -124,6 +124,10 @@ const HomeScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate("MyRecipes")} style={styles.navButton}>
           <Text style={styles.navButtonText}>My Recipes</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("MyFavorites")} style={styles.navButton}>
+       <Text style={styles.navButtonText}>Favorites</Text>
+      </TouchableOpacity>
       </View>
 
       <View style={styles.searchContainer}>
