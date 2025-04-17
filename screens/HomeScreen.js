@@ -27,7 +27,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     setLoading(true);
-
     let recipeRef = collection(db, "recipes");
     if (category.trim() !== "") {
       recipeRef = query(recipeRef, where("category", "==", category));
@@ -104,15 +103,19 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      {/* Top Right Logout */}
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.heading}>
         🍽️ <Text style={styles.bold}>Recipe List</Text>
       </Text>
 
+      {/* Navigation Button Grid */}
       <View style={styles.navGrid}>
-        <TouchableOpacity onPress={handleLogout} style={styles.navButton}>
-          <Text style={styles.navButtonText}>Logout</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity onPress={handleAddRecipe} style={styles.navButton}>
           <Text style={styles.navButtonText}>Add Recipe</Text>
         </TouchableOpacity>
@@ -126,8 +129,8 @@ const HomeScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate("MyFavorites")} style={styles.navButton}>
-       <Text style={styles.navButtonText}>Favorites</Text>
-      </TouchableOpacity>
+          <Text style={styles.navButtonText}>Favorites</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.searchContainer}>
@@ -199,6 +202,24 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F1E4", padding: 20 },
+
+  topBar: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: 10,
+  },
+  logoutButton: {
+    backgroundColor: "#FAD4D4",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+  },
+  logoutText: {
+    color: "#800000",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+
   heading: {
     fontSize: 28,
     fontWeight: "bold",
@@ -207,6 +228,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   bold: { color: "#FFB84D" },
+
   navGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -234,6 +256,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+
   loader: { marginTop: 20 },
   emptyMessage: {
     textAlign: "center",
