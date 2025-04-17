@@ -1,7 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
-import { arrayRemove, arrayUnion, collection, doc, getDoc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -16,14 +27,23 @@ import {
 import { auth, db } from "../firebaseConfig";
 
 const categories = ["All", "Veg", "Non-Veg", "Starter", "Drinks", "Dessert"];
+
 const HomeScreen = () => {
   const [recipes, setRecipes] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [favoriteIds, setFavoriteIds] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserEmail(currentUser.email);
+    }
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -37,7 +57,7 @@ const HomeScreen = () => {
       (querySnapshot) => {
         const recipesList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
+          ...doc.data()
         }));
         setRecipes(recipesList);
         setLoading(false);
@@ -72,8 +92,8 @@ const HomeScreen = () => {
       favorites: isFav ? arrayRemove(recipeId) : arrayUnion(recipeId)
     });
 
-    setFavoriteIds(prev =>
-      isFav ? prev.filter(id => id !== recipeId) : [...prev, recipeId]
+    setFavoriteIds((prev) =>
+      isFav ? prev.filter((id) => id !== recipeId) : [...prev, recipeId]
     );
   };
 
@@ -110,25 +130,41 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {/* Show user email */}
+      {userEmail !== "" && (
+  <View style={styles.userBox}>
+    <Ionicons name="person-circle-outline" size={20} color="#3C3C3C" />
+    <Text style={styles.userBoxText}>Logged in as: {userEmail}</Text>
+  </View>
+)}
+
       <Text style={styles.heading}>
         🍽️ <Text style={styles.bold}>Recipe List</Text>
       </Text>
 
-      {/* Navigation Button Grid */}
       <View style={styles.navGrid}>
         <TouchableOpacity onPress={handleAddRecipe} style={styles.navButton}>
           <Text style={styles.navButtonText}>Add Recipe</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleNavigateToProfile} style={styles.navButton}>
+        <TouchableOpacity
+          onPress={handleNavigateToProfile}
+          style={styles.navButton}
+        >
           <Text style={styles.navButtonText}>Profile</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("MyRecipes")} style={styles.navButton}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("MyRecipes")}
+          style={styles.navButton}
+        >
           <Text style={styles.navButtonText}>My Recipes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("MyFavorites")} style={styles.navButton}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("MyFavorites")}
+          style={styles.navButton}
+        >
           <Text style={styles.navButtonText}>Favorites</Text>
         </TouchableOpacity>
       </View>
@@ -150,14 +186,16 @@ const HomeScreen = () => {
             key={cat}
             style={[
               styles.categoryCard,
-              category === (cat === "All" ? "" : cat) && styles.categoryCardSelected,
+              category === (cat === "All" ? "" : cat) &&
+                styles.categoryCardSelected
             ]}
             onPress={() => setCategory(cat === "All" ? "" : cat)}
           >
             <Text
               style={[
                 styles.categoryText,
-                category === (cat === "All" ? "" : cat) && styles.categoryTextSelected,
+                category === (cat === "All" ? "" : cat) &&
+                  styles.categoryTextSelected
               ]}
             >
               {cat}
@@ -177,17 +215,23 @@ const HomeScreen = () => {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.recipeCard}
-              onPress={() => navigation.navigate("RecipeDetailScreen", { recipe: item })}
+              onPress={() =>
+                navigation.navigate("RecipeDetailScreen", { recipe: item })
+              }
               activeOpacity={0.85}
             >
               <Image source={{ uri: item.imageUrl }} style={styles.recipeImage} />
               <View style={styles.recipeText}>
                 <Text style={styles.recipeTitle}>{item.title}</Text>
-                <Text style={styles.recipeCategory}>{item.category || "Uncategorized"}</Text>
+                <Text style={styles.recipeCategory}>
+                  {item.category || "Uncategorized"}
+                </Text>
               </View>
               <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
                 <Ionicons
-                  name={favoriteIds.includes(item.id) ? "heart" : "heart-outline"}
+                  name={
+                    favoriteIds.includes(item.id) ? "heart" : "heart-outline"
+                  }
                   size={24}
                   color="tomato"
                 />
@@ -201,41 +245,65 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  userBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF1D6",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    justifyContent: "center",
+    gap: 6,
+    alignSelf: "stretch",
+    borderWidth: 1,
+    borderColor: "#FFD28F"
+  },
+  userBoxText: {
+    fontSize: 14,
+    color: "#3C3C3C",
+    fontWeight: "600",
+  },
+
   container: { flex: 1, backgroundColor: "#F8F1E4", padding: 20 },
 
   topBar: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginBottom: 10,
+    marginBottom: 10
   },
   logoutButton: {
     backgroundColor: "#FAD4D4",
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 10,
+    borderRadius: 10
   },
   logoutText: {
     color: "#800000",
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 14
   },
-
+  userInfo: {
+    textAlign: "right",
+    fontSize: 13,
+    color: "#555",
+    marginBottom: 8
+  },
   heading: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#3C3C3C",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 20
   },
   bold: { color: "#FFB84D" },
-
   navGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginBottom: 20,
-    gap: 10,
+    gap: 10
   },
+  
   navButton: {
     backgroundColor: "#F0EAD2",
     paddingVertical: 12,
@@ -248,28 +316,27 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 3,
+    elevation: 3
   },
   navButtonText: {
     color: "#1B4217",
     fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
-
   loader: { marginTop: 20 },
   emptyMessage: {
     textAlign: "center",
     fontSize: 18,
     color: "#EEE",
-    marginTop: 20,
+    marginTop: 20
   },
   searchContainer: { marginBottom: 15 },
   searchLabel: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#1B4217",
+    color: "#1B4217"
   },
   searchInput: {
     borderWidth: 1,
@@ -278,7 +345,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     backgroundColor: "#FFFFFF",
-    color: "#000",
+    color: "#000"
   },
   recipeCard: {
     flexDirection: "row",
@@ -293,31 +360,31 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     padding: 10,
     alignItems: "center",
-    flex: 1,
+    flex: 1
   },
   recipeImage: {
     width: 100,
     height: 100,
     borderRadius: 10,
-    marginRight: 15,
+    marginRight: 15
   },
   recipeText: { flex: 1, justifyContent: "center" },
   recipeTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#1B4217",
+    color: "#1B4217"
   },
   recipeCategory: {
     fontSize: 14,
     color: "#555",
-    marginTop: 4,
+    marginTop: 4
   },
   categoryGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginBottom: 20,
-    gap: 12,
+    gap: 12
   },
   categoryCard: {
     backgroundColor: "#FFF5E0",
@@ -332,15 +399,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
     borderWidth: 1,
-    borderColor: "#FFB84D",
+    borderColor: "#FFB84D"
   },
   categoryCardSelected: { backgroundColor: "#FFB84D" },
   categoryText: {
     color: "#1B4217",
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 15
   },
-  categoryTextSelected: { color: "#1B4217" },
+  categoryTextSelected: { color: "#1B4217" }
 });
 
 export default HomeScreen;
+
