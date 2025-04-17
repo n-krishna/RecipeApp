@@ -1,6 +1,7 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -20,6 +21,7 @@ const HomeScreen = () => {
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [favoriteIds, setFavoriteIds] = useState([]);
 
   const navigation = useNavigation();
 
@@ -50,6 +52,32 @@ const HomeScreen = () => {
     return () => unsubscribe();
   }, [category]);
 
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        setFavoriteIds(userSnap.data().favorites || []);
+      } else {
+        await setDoc(userRef, { favorites: [] });
+      }
+    };
+    fetchFavorites();
+  }, []);
+
+  const toggleFavorite = async (recipeId) => {
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    const isFav = favoriteIds.includes(recipeId);
+
+    await updateDoc(userRef, {
+      favorites: isFav ? arrayRemove(recipeId) : arrayUnion(recipeId)
+    });
+
+    setFavoriteIds(prev =>
+      isFav ? prev.filter(id => id !== recipeId) : [...prev, recipeId]
+    );
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -76,12 +104,10 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Heading */}
       <Text style={styles.heading}>
         🍽️ <Text style={styles.bold}>Recipe List</Text>
       </Text>
 
-      {/* Updated Button Grid */}
       <View style={styles.navGrid}>
         <TouchableOpacity onPress={handleLogout} style={styles.navButton}>
           <Text style={styles.navButtonText}>Logout</Text>
@@ -100,7 +126,6 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Search */}
       <View style={styles.searchContainer}>
         <Text style={styles.searchLabel}>Search by Category or Dish Name:</Text>
         <TextInput
@@ -153,6 +178,13 @@ const HomeScreen = () => {
                 <Text style={styles.recipeTitle}>{item.title}</Text>
                 <Text style={styles.recipeCategory}>{item.category || "Uncategorized"}</Text>
               </View>
+              <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
+                <Ionicons
+                  name={favoriteIds.includes(item.id) ? "heart" : "heart-outline"}
+                  size={24}
+                  color="tomato"
+                />
+              </TouchableOpacity>
             </TouchableOpacity>
           )}
         />
@@ -162,11 +194,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F1E4",
-    padding: 20,
-  },
+  container: { flex: 1, backgroundColor: "#F8F1E4", padding: 20 },
   heading: {
     fontSize: 28,
     fontWeight: "bold",
@@ -174,11 +202,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
-  bold: {
-    color: "#FFB84D",
-  },
-
-  // ✅ Updated grid-style buttons
+  bold: { color: "#FFB84D" },
   navGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -206,19 +230,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-
-  loader: {
-    marginTop: 20,
-  },
+  loader: { marginTop: 20 },
   emptyMessage: {
     textAlign: "center",
     fontSize: 18,
     color: "#EEE",
     marginTop: 20,
   },
-  searchContainer: {
-    marginBottom: 15,
-  },
+  searchContainer: { marginBottom: 15 },
   searchLabel: {
     fontSize: 16,
     fontWeight: "bold",
@@ -255,10 +274,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 15,
   },
-  recipeText: {
-    flex: 1,
-    justifyContent: "center",
-  },
+  recipeText: { flex: 1, justifyContent: "center" },
   recipeTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -291,17 +307,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#FFB84D",
   },
-  categoryCardSelected: {
-    backgroundColor: "#FFB84D",
-  },
+  categoryCardSelected: { backgroundColor: "#FFB84D" },
   categoryText: {
     color: "#1B4217",
     fontWeight: "bold",
     fontSize: 15,
   },
-  categoryTextSelected: {
-    color: "#1B4217",
-  },
+  categoryTextSelected: { color: "#1B4217" },
 });
 
 export default HomeScreen;

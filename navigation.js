@@ -5,6 +5,7 @@ import AddRecipeScreen from "./screens/AddRecipeScreen"; // Adding navigation fo
 import EditRecipeScreen from './screens/EditRecipeScreen';
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
+import MyFavoritesScreen from "./screens/MyFavoritesScreen";
 import MyRecipesScreen from "./screens/MyRecipesScreen";
 import ProfileScreen from './screens/ProfileScreen';
 import RecipeDetailScreen from "./screens/RecipeDetailScreen";
@@ -24,6 +25,7 @@ export default function AppNavigator() {
         <Stack.Screen name="EditRecipe" component={EditRecipeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="MyRecipes" component={MyRecipesScreen} />
+        <Stack.Screen name="MyFavorites" component={MyFavoritesScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
