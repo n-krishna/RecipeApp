@@ -19,6 +19,8 @@ const HomeScreen = () => {
   const [recipes, setRecipes] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -57,6 +59,19 @@ const HomeScreen = () => {
     navigation.navigate("AddRecipe");
   };
 
+  const handleNavigateToProfile = () => {
+    navigation.navigate("Profile");
+  }
+
+  const filteredRecipes = recipes.filter(recipe => {
+    const search = searchTerm.trim().toLowerCase();
+    return (
+      recipe.title.toLowerCase().includes(search) ||
+      recipe.category?.toLowerCase().includes(search)
+    );
+  });
+  
+
   return (
     <View style={styles.container}>
       {/* Heading */}
@@ -71,17 +86,20 @@ const HomeScreen = () => {
         <TouchableOpacity onPress={handleAddRecipe} style={styles.cardButton}>
           <Text style={styles.cardButtonText}>Add New Recipe</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={handleNavigateToProfile} style={styles.cardButton}>
+          <Text style={styles.cardButtonText}>Profile</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Search */}
       <View style={styles.searchContainer}>
-        <Text style={styles.searchLabel}>Search Category:</Text>
+        <Text style={styles.searchLabel}>Search by Category or Dish Name:</Text>
         <TextInput
           style={styles.searchInput}
-          placeholder="Type category (e.g., Veg, Dessert)..."
+          placeholder="e.g., Veg or Biriyani"
           placeholderTextColor="#777"
-          value={category}
-          onChangeText={setCategory}
+          value={searchTerm}
+          onChangeText={setSearchTerm}
         />
       </View>
 
@@ -107,14 +125,13 @@ const HomeScreen = () => {
         ))}
       </View>
 
-      {/* Recipe List */}
       {loading ? (
         <ActivityIndicator size="large" color="#FFB84D" style={styles.loader} />
-      ) : recipes.length === 0 ? (
-        <Text style={styles.emptyMessage}>No recipes found!</Text>
-      ) : (
+        ) : filteredRecipes.length === 0 ? (
+          <Text style={styles.emptyMessage}>No recipes found!</Text>
+        ) : (
         <FlatList
-          data={recipes}
+          data={filteredRecipes}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -131,6 +148,7 @@ const HomeScreen = () => {
           )}
         />
       )}
+
     </View>
   );
 };
