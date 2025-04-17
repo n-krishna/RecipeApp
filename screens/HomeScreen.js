@@ -123,20 +123,18 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Top Right Logout */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Show user email */}
       {userEmail !== "" && (
-  <View style={styles.userBox}>
-    <Ionicons name="person-circle-outline" size={20} color="#3C3C3C" />
-    <Text style={styles.userBoxText}>Logged in as: {userEmail}</Text>
-  </View>
-)}
+        <View style={styles.userBox}>
+          <Ionicons name="person-circle-outline" size={20} color="#3C3C3C" />
+          <Text style={styles.userBoxText}>Logged in as: {userEmail}</Text>
+        </View>
+      )}
 
       <Text style={styles.heading}>
         🍽️ <Text style={styles.bold}>Recipe List</Text>
@@ -147,55 +145,44 @@ const HomeScreen = () => {
           <Text style={styles.navButtonText}>Add Recipe</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={handleNavigateToProfile}
-          style={styles.navButton}
-        >
+        <TouchableOpacity onPress={handleNavigateToProfile} style={styles.navButton}>
           <Text style={styles.navButtonText}>Profile</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("MyRecipes")}
-          style={styles.navButton}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("MyRecipes")} style={styles.navButton}>
           <Text style={styles.navButtonText}>My Recipes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("MyFavorites")}
-          style={styles.navButton}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("MyFavorites")} style={styles.navButton}>
           <Text style={styles.navButtonText}>Favorites</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.searchContainer}>
-        <Text style={styles.searchLabel}>Search by Category or Dish Name:</Text>
         <TextInput
           style={styles.searchInput}
-          placeholder="e.g., Veg or Biriyani"
+          placeholder="Search Dish Name or Category "
           placeholderTextColor="#777"
           value={searchTerm}
           onChangeText={setSearchTerm}
         />
       </View>
 
-      <View style={styles.categoryGrid}>
+      {/* Inline Filter Pills */}
+      <View style={styles.inlineCategoryContainer}>
         {categories.map((cat) => (
           <TouchableOpacity
             key={cat}
             style={[
-              styles.categoryCard,
-              category === (cat === "All" ? "" : cat) &&
-                styles.categoryCardSelected
+              styles.inlinePill,
+              category === (cat === "All" ? "" : cat) && styles.inlinePillSelected
             ]}
             onPress={() => setCategory(cat === "All" ? "" : cat)}
           >
             <Text
               style={[
-                styles.categoryText,
-                category === (cat === "All" ? "" : cat) &&
-                  styles.categoryTextSelected
+                styles.inlinePillText,
+                category === (cat === "All" ? "" : cat) && styles.inlinePillTextSelected
               ]}
             >
               {cat}
@@ -229,9 +216,7 @@ const HomeScreen = () => {
               </View>
               <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
                 <Ionicons
-                  name={
-                    favoriteIds.includes(item.id) ? "heart" : "heart-outline"
-                  }
+                  name={favoriteIds.includes(item.id) ? "heart" : "heart-outline"}
                   size={24}
                   color="tomato"
                 />
@@ -245,6 +230,10 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#F8F1E4", padding: 20 },
+  topBar: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 10 },
+  logoutButton: { backgroundColor: "#FAD4D4", paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
+  logoutText: { color: "#800000", fontWeight: "bold", fontSize: 14 },
   userBox: {
     flexDirection: "row",
     alignItems: "center",
@@ -258,43 +247,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#FFD28F"
   },
-  userBoxText: {
-    fontSize: 14,
-    color: "#3C3C3C",
-    fontWeight: "600",
-  },
-
-  container: { flex: 1, backgroundColor: "#F8F1E4", padding: 20 },
-
-  topBar: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginBottom: 10
-  },
-  logoutButton: {
-    backgroundColor: "#FAD4D4",
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10
-  },
-  logoutText: {
-    color: "#800000",
-    fontWeight: "bold",
-    fontSize: 14
-  },
-  userInfo: {
-    textAlign: "right",
-    fontSize: 13,
-    color: "#555",
-    marginBottom: 8
-  },
-  heading: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#3C3C3C",
-    textAlign: "center",
-    marginBottom: 20
-  },
+  userBoxText: { fontSize: 14, color: "#3C3C3C", fontWeight: "600" },
+  heading: { fontSize: 28, fontWeight: "bold", color: "#3C3C3C", textAlign: "center", marginBottom: 20 },
   bold: { color: "#FFB84D" },
   navGrid: {
     flexDirection: "row",
@@ -303,7 +257,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 10
   },
-  
   navButton: {
     backgroundColor: "#F0EAD2",
     paddingVertical: 12,
@@ -318,26 +271,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 3
   },
-  navButtonText: {
-    color: "#1B4217",
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  loader: { marginTop: 20 },
-  emptyMessage: {
-    textAlign: "center",
-    fontSize: 18,
-    color: "#EEE",
-    marginTop: 20
-  },
+  navButtonText: { color: "#1B4217", fontSize: 16, fontWeight: "bold", textAlign: "center" },
   searchContainer: { marginBottom: 15 },
-  searchLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-    color: "#1B4217"
-  },
+  searchLabel: { fontSize: 16, fontWeight: "bold", marginBottom: 5, color: "#1B4217" },
   searchInput: {
     borderWidth: 1,
     borderColor: "#F0EAD2",
@@ -347,6 +283,45 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     color: "#000"
   },
+  searchWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#F0EAD2",
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 10
+  },
+  searchIcon: {
+    marginRight: 6
+  },
+  searchInputWithIcon: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 10,
+    color: "#000"
+  },
+
+  inlineCategoryContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginBottom: 18,
+    gap: 8
+  },
+  inlinePill: {
+    backgroundColor: "#FFF5E0",
+    borderColor: "#FFB84D",
+    borderWidth: 1,
+    borderRadius: 15,
+    paddingVertical: 6,
+    paddingHorizontal: 12
+  },
+  inlinePillSelected: { backgroundColor: "#FFB84D" },
+  inlinePillText: { color: "#1B4217", fontWeight: "bold", fontSize: 14 },
+  inlinePillTextSelected: { color: "#1B4217" },
+  loader: { marginTop: 20 },
+  emptyMessage: { textAlign: "center", fontSize: 18, color: "#EEE", marginTop: 20 },
   recipeCard: {
     flexDirection: "row",
     backgroundColor: "#F0EAD2",
@@ -362,53 +337,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1
   },
-  recipeImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginRight: 15
-  },
+  recipeImage: { width: 100, height: 100, borderRadius: 10, marginRight: 15 },
   recipeText: { flex: 1, justifyContent: "center" },
-  recipeTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#1B4217"
-  },
-  recipeCategory: {
-    fontSize: 14,
-    color: "#555",
-    marginTop: 4
-  },
-  categoryGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    gap: 12
-  },
-  categoryCard: {
-    backgroundColor: "#FFF5E0",
-    width: "30%",
-    paddingVertical: 18,
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-    borderWidth: 1,
-    borderColor: "#FFB84D"
-  },
-  categoryCardSelected: { backgroundColor: "#FFB84D" },
-  categoryText: {
-    color: "#1B4217",
-    fontWeight: "bold",
-    fontSize: 15
-  },
-  categoryTextSelected: { color: "#1B4217" }
+  recipeTitle: { fontSize: 18, fontWeight: "bold", color: "#1B4217" },
+  recipeCategory: { fontSize: 14, color: "#555", marginTop: 4 }
 });
 
 export default HomeScreen;
-
