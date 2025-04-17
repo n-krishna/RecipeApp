@@ -4,7 +4,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   Image,
   StyleSheet,
@@ -15,6 +14,7 @@ import {
 } from "react-native";
 import { auth, db } from "../firebaseConfig";
 
+const categories = ["All", "Veg", "Non-Veg", "Starter", "Drinks","Dessert"];
 const HomeScreen = () => {
   const [recipes, setRecipes] = useState([]);
   const [category, setCategory] = useState("");
@@ -63,14 +63,21 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBar}>
-        <Text style={styles.heading}>🍽️ <Text style={styles.bold}>Recipe List</Text></Text>
-        <Button title="Logout" onPress={handleLogout} color="#FF6B6B" />
+      {/* Heading */}
+      <Text style={styles.heading}>🍽️ <Text style={styles.bold}>Recipe List</Text></Text>
+
+      {/* Button Row */}
+      <View style={styles.buttonRow}>
+        <TouchableOpacity onPress={handleLogout} style={styles.cardButton}>
+          <Text style={styles.cardButtonText}>Logout</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleAddRecipe} style={styles.cardButton}>
+          <Text style={styles.cardButtonText}>Add New Recipe</Text>
+        </TouchableOpacity>
       </View>
 
-      <Button title="Add New Recipe" onPress={handleAddRecipe} color="#6DC36D" />
-      <View style={{ marginVertical: 10 }} />
-
+      {/* Search */}
       <View style={styles.searchContainer}>
         <Text style={styles.searchLabel}>Search Category:</Text>
         <TextInput
@@ -82,6 +89,30 @@ const HomeScreen = () => {
         />
       </View>
 
+      <View style={styles.categoryGrid}>
+  {categories.map((cat) => (
+    <TouchableOpacity
+      key={cat}
+      style={[
+        styles.categoryCard,
+        category === (cat === "All" ? "" : cat) && styles.categoryCardSelected
+      ]}
+      onPress={() => setCategory(cat === "All" ? "" : cat)}
+    >
+      <Text
+        style={[
+          styles.categoryText,
+          category === (cat === "All" ? "" : cat) && styles.categoryTextSelected
+        ]}
+      >
+        {cat}
+      </Text>
+    </TouchableOpacity>
+  ))}
+</View>
+
+
+      {/* Recipe List */}
       {loading ? (
         <ActivityIndicator size="large" color="#FFB84D" style={styles.loader} />
       ) : recipes.length === 0 ? (
@@ -110,24 +141,58 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#1B4217", padding: 20 },
-  topBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10
+  container: {
+    flex: 1,
+    backgroundColor: "#F8F1E4",
+    padding: 20
   },
   heading: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#F0EAD2"
+    color: "#3C3C3C",
+    textAlign: "center",
+    marginBottom: 20
   },
-  bold: { fontWeight: "900", color: "#FFB84D" },
-  loader: { marginTop: 20 },
-  emptyMessage: { textAlign: "center", fontSize: 18, color: "#EEE", marginTop: 20 },
-
-  searchContainer: { marginBottom: 15 },
-  searchLabel: { fontSize: 16, fontWeight: "bold", marginBottom: 5, color: "#F0EAD2" },
+  bold: {
+    color: "#FFB84D"
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15
+  },
+  cardButton: {
+    backgroundColor: "#F0EAD2",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    flex: 1,
+    marginHorizontal: 5,
+    alignItems: "center"
+  },
+  cardButtonText: {
+    color: "#1B4217",
+    fontSize: 16,
+    fontWeight: "600"
+  },
+  loader: {
+    marginTop: 20
+  },
+  emptyMessage: {
+    textAlign: "center",
+    fontSize: 18,
+    color: "#EEE",
+    marginTop: 20
+  },
+  searchContainer: {
+    marginBottom: 15
+  },
+  searchLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#1B4217"
+  },
   searchInput: {
     borderWidth: 1,
     borderColor: "#F0EAD2",
@@ -137,7 +202,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     color: "#000"
   },
-
   recipeCard: {
     flexDirection: "row",
     backgroundColor: "#F0EAD2",
@@ -150,7 +214,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     padding: 10,
-    alignItems: "center"
+    alignItems: "center",
+    flex: 1, 
   },
   recipeImage: {
     width: 100,
@@ -171,6 +236,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#555",
     marginTop: 4
+  },
+  
+  categoryGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    gap: 12,
+  },
+  
+  categoryCard: {
+    backgroundColor: "#FFF5E0",
+    width: "30%",
+    paddingVertical: 18,
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: "#FFB84D",
+  },
+  
+  categoryCardSelected: {
+    backgroundColor: "#FFB84D",
+  },
+  
+  categoryText: {
+    color: "#1B4217",
+    fontWeight: "bold",
+    fontSize: 15
+  },
+  
+  categoryTextSelected: {
+    color: "#1B4217"
   }
 });
 

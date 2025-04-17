@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import {
   Alert,
   Animated,
+  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -109,149 +110,312 @@ export default function SignupScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Create an Account</Text>
-
-        {/* Full Name */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="person-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="Full Name" value={name} onChangeText={setName} autoCapitalize="words" style={styles.input} />
-        </View>
-
-        {/* Email */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="mail-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="Email Address" value={email} onChangeText={validateEmail} keyboardType="email-address" autoCapitalize="none" style={styles.input} />
-        </View>
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-
-        {/* Phone Number */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="call-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="+1" value={countryCode} onChangeText={setCountryCode} style={styles.countryCodeInput} keyboardType="phone-pad" />
-          <TextInput placeholder="Phone Number" value={phoneNumber} onChangeText={validatePhoneNumber} keyboardType="phone-pad" style={styles.phoneInput} />
-        </View>
-        {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
-
-        {/* Address */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="location-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="Address" value={address} onChangeText={setAddress} autoCapitalize="words" style={styles.input} />
-        </View>
-
-        {/* Country */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="earth-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="Country" value={country} onChangeText={setCountry} autoCapitalize="words" style={styles.input} />
-        </View>
-
-        {/* Password */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="lock-closed-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry={!showPassword} style={styles.input} />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={22} color="#3498db" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Confirm Password */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="lock-closed-outline" size={22} color="#3498db" style={styles.icon} />
-          <TextInput placeholder="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry={!showConfirmPassword} style={styles.input} />
-          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Ionicons name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} size={22} color="#3498db" />
-          </TouchableOpacity>
-        </View>
-
-        <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-          <TouchableOpacity style={styles.signupButton} onPress={handleSignup} onPressIn={handlePressIn} onPressOut={handlePressOut}>
-            <Text style={styles.signupButtonText}>Sign Up</Text>
-          </TouchableOpacity>
-        </Animated.View>
-
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.loginText}>Already have an account? Login</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <ImageBackground
+      source={require("../assets/Signup.webp")} // make sure this image exists in the assets folder
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.overlay}> {/* Optional: if you want semi-transparent overlay */}
+            <Text style={styles.title}>Create an Account</Text>
+  
+            {/* Full Name */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="person-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="Full Name"
+                value={name}
+                onChangeText={setName}
+                autoCapitalize="words"
+                style={styles.input}
+              />
+            </View>
+  
+            {/* Email */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="mail-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="Email Address"
+                value={email}
+                onChangeText={validateEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={styles.input}
+              />
+            </View>
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+  
+            {/* Phone Number */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="call-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="+1"
+                value={countryCode}
+                onChangeText={setCountryCode}
+                style={styles.countryCodeInput}
+                keyboardType="phone-pad"
+              />
+              <TextInput
+                placeholder="Phone Number"
+                value={phoneNumber}
+                onChangeText={validatePhoneNumber}
+                keyboardType="phone-pad"
+                style={styles.phoneInput}
+              />
+            </View>
+            {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
+  
+            {/* Address */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="location-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="Address"
+                value={address}
+                onChangeText={setAddress}
+                autoCapitalize="words"
+                style={styles.input}
+              />
+            </View>
+  
+            {/* Country */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="earth-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="Country"
+                value={country}
+                onChangeText={setCountry}
+                autoCapitalize="words"
+                style={styles.input}
+              />
+            </View>
+  
+            {/* Password */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="lock-closed-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+                style={styles.input}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={22} color="#3498db" />
+              </TouchableOpacity>
+            </View>
+  
+            {/* Confirm Password */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="lock-closed-outline" size={22} color="#3498db" style={styles.icon} />
+              <TextInput
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
+                style={styles.input}
+              />
+              <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                <Ionicons name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} size={22} color="#3498db" />
+              </TouchableOpacity>
+            </View>
+  
+            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+              <TouchableOpacity
+                style={styles.signupButton}
+                onPress={handleSignup}
+                onPressIn={handlePressIn}
+                onPressOut={handlePressOut}
+              >
+                <Text style={styles.signupButtonText}>Sign Up</Text>
+              </TouchableOpacity>
+            </Animated.View>
+  
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text style={styles.loginText}>Already have an account? Login</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 }
 
-// 🔹 Styling
+// // 🔹 Styling
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#1B4217",
+//   },
+//   scrollContainer: {
+//     flexGrow: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     paddingHorizontal: 20,
+//   },
+//   title: {
+//     fontSize: 26,
+//     fontWeight: "bold",
+//     color: "#ffffff", 
+//     marginBottom: 20,
+//   },
+//   inputContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     width: "100%",
+//     backgroundColor: "#F0EAD2",
+//     borderRadius: 10,
+//     paddingHorizontal: 15,
+//     marginBottom: 15,
+//     borderWidth: 1,
+//     borderColor: "#3498db",
+//   },
+//   icon: {
+//     marginRight: 10,
+//   },
+//   input: {
+//     flex: 1,
+//     height: 50,
+//     color: "#1B4217",
+//   },
+//   countryCodeInput: {
+//     width: 50,
+//     textAlign: "center",
+//     borderRightWidth: 1,
+//     borderRightColor: "#ccc",
+//     marginRight: 10,
+//     color: "#1B4217",
+//   },
+//   phoneInput: {
+//     flex: 1,
+//     height: 50,
+//     color: "#1B4217",
+//   },
+//   errorText: {
+//     color: "red",
+//     fontSize: 14,
+//     alignSelf: "flex-start",
+//     marginBottom: 5,
+//     marginLeft: 5,
+//   },
+//   signupButton: {
+//     width: 200,
+//     height: 50,
+//     backgroundColor: "#F0EAD2",
+//     borderRadius: 10,
+//     borderWidth: 1,
+//     borderColor: "#3498db",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     marginTop: 15,
+//     elevation: 2,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 2,
+//   },
+
+// signupButtonText: {
+//   color: "#1B4217", // green text color (same as input text)
+//   fontSize: 18,
+//   fontWeight: "bold",
+// },
+//   loginText: {
+//     marginTop: 15,
+//     color: "#ffffff", 
+//     fontSize: 16,
+//     fontWeight: 'bold'
+//   },
+ 
+//   overlay: {
+//     backgroundColor: "rgba(0, 0, 0, 0.5)", // transparent dark overlay over background image
+//     borderRadius: 16,
+//     padding: 20,
+//     marginVertical: 30,
+//   },
+// });
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1B4217",
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: "center",
-    alignItems: "center",
     paddingHorizontal: 20,
+    paddingVertical: 40,
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // Dark semi-transparent overlay
+    borderRadius: 20,
+    padding: 20,
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#ffffff", 
+    color: "#fff",
+    textAlign: "center",
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
-    backgroundColor: "#F0EAD2",
+    backgroundColor: "#F0EAD2", // Updated color
     borderRadius: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     marginBottom: 15,
-    borderWidth: 1,
-    borderColor: "#3498db",
+    width: "90%",
+    marginLeft: 25,
   },
   icon: {
-    marginRight: 10,
+    marginRight: 8,
   },
   input: {
     flex: 1,
     height: 50,
-    color: "#1B4217",
+    fontSize: 16,
+    color: "#333",
   },
   countryCodeInput: {
     width: 50,
-    textAlign: "center",
-    borderRightWidth: 1,
-    borderRightColor: "#ccc",
+    height: 50,
+    fontSize: 16,
+    color: "#333",
     marginRight: 10,
-    color: "#1B4217",
   },
   phoneInput: {
     flex: 1,
     height: 50,
-    color: "#1B4217",
+    fontSize: 16,
+    color: "#333",
   },
   errorText: {
-    color: "red",
+    color: "#ff4d4d",
     fontSize: 14,
-    alignSelf: "flex-start",
-    marginBottom: 5,
-    marginLeft: 5,
+    marginBottom: 10,
+    marginLeft: 10,
   },
   signupButton: {
-    width: "90%",
-    height: 50,
-    backgroundColor: "#3498db",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#F0EAD2",
+    paddingVertical: 15,
     borderRadius: 10,
-    marginTop: 15,
+    alignItems: "center",
+    marginTop: 10,
   },
   signupButtonText: {
-    color: "#fff",
+    color: "#1B4217",
     fontSize: 18,
     fontWeight: "bold",
   },
   loginText: {
     marginTop: 15,
-    color: "#ffffff", 
+    color: "#ffffff",
     fontSize: 16,
-  },
+    fontWeight: 'bold',
+    textAlign: "center",
+  }
 });

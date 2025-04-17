@@ -3,6 +3,7 @@ import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/aut
 import React, { useState } from "react";
 import {
   Alert,
+  ImageBackground,
   Modal,
   StyleSheet,
   Text,
@@ -55,46 +56,53 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back</Text>
-      <Text style={styles.subtitle}>Login to your account</Text>
-
-      <TextInput
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-        autoCapitalize="none"
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        source={require("../assets/Image.avif")}
+        style={styles.backgroundImage}
+        resizeMode="cover"
       />
 
-      {/* Password Input with Show/Hide Icon */}
-      <View style={styles.passwordContainer}>
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>Login to your account</Text>
+
         <TextInput
-          placeholder="Enter your password"
-          value={password}
-          secureTextEntry={secureText}
-          onChangeText={setPassword}
-          style={styles.passwordInput}
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
-        <TouchableOpacity onPress={() => setSecureText(!secureText)} style={styles.eyeIcon}>
-          <Ionicons name={secureText ? "eye-off" : "eye"} size={24} color="#7f8c8d" />
+
+        <View style={styles.passwordContainer}>
+          <TextInput
+            placeholder="Enter your password"
+            value={password}
+            secureTextEntry={secureText}
+            onChangeText={setPassword}
+            style={styles.passwordInput}
+          />
+          <TouchableOpacity onPress={() => setSecureText(!secureText)} style={styles.eyeIcon}>
+            <Ionicons name={secureText ? "eye-off" : "eye"} size={24} color="#7f8c8d" />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+          <Text style={styles.signupText}>Don't have an account? Sign up</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-        <Text style={styles.signupText}>Don't have an account? Sign up</Text>
-      </TouchableOpacity>
-
-      {/* Password Reset Modal */}
+      {/* Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -104,8 +112,10 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.modalOverlay}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>Reset Password</Text>
-            <Text style={styles.modalSubtitle}>Enter your email to receive a password reset link</Text>
-            
+            <Text style={styles.modalSubtitle}>
+              Enter your email to receive a password reset link
+            </Text>
+
             <TextInput
               placeholder="Enter your email"
               value={resetEmail}
@@ -140,19 +150,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#ffffff", // changed from #2c3e50
+    color: "#1B4217", // changed from #2c3e50
     marginBottom: 5,
   },
   subtitle: {
     fontSize: 16,
-    color: "#ffffff", // changed from #7f8c8d
+    color: "#1B4217", // changed from #7f8c8d
     marginBottom: 20,
   },
   input: {
-    width: "100%",
+    width: "80%",
     height: 50,
-    borderWidth: 1,
-    borderColor: "#bdc3c7",
+    borderWidth: 2,
+    borderColor: "#1B4217",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
@@ -160,10 +170,10 @@ const styles = StyleSheet.create({
     color: "#1B4217", // optional: explicit for contrast
   },
   passwordContainer: {
-    width: "100%",
+    width: "80%",
     height: 50,
-    borderWidth: 1,
-    borderColor: "#bdc3c7",
+    borderWidth: 2,
+    borderColor: "#1B4217",
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -180,16 +190,22 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   loginButton: {
-    width: "100%",
+    width: "60%",
     height: 50,
-    backgroundColor: "#3498db",
+    backgroundColor: "#F0EAD2", // match app theme
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
+    borderRadius: 15,
     marginTop: 10,
+    shadowColor: "#1B4217",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+    borderColor: "#1B4217"
   },
   loginButtonText: {
-    color: "#fff",
+    color: "1B4217",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -201,8 +217,9 @@ const styles = StyleSheet.create({
   },
   signupText: {
     marginTop: 15,
-    color: "#ffffff", 
+    color: "#1B4217", 
     fontSize: 16,
+    fontWeight: 'bold'
   },
   /* Modal Styling */
   modalOverlay: {
@@ -254,5 +271,17 @@ const styles = StyleSheet.create({
     color: "#e74c3c",
     fontSize: 16,
     textDecorationLine: "underline",
+  },
+  backgroundImage: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.3)", // lighter overlay to show more of the image
   },
 });

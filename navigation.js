@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
+import AddRecipeScreen from "./screens/AddRecipeScreen"; // Adding navigation for Recipe  : Faraz
+import EditRecipeScreen from './screens/EditRecipeScreen';
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
-import AddRecipeScreen from "./screens/AddRecipeScreen"; // Adding navigation for Recipe  : Faraz
 import RecipeDetailScreen from "./screens/RecipeDetailScreen";
-import EditRecipeScreen from './screens/EditRecipeScreen';
+import SignupScreen from "./screens/SignupScreen";
 
 const Stack = createStackNavigator();
 
@@ -24,3 +24,4 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
+

@@ -1,15 +1,15 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
   Text,
-  View,
-  Button,
-  Alert
+  TouchableOpacity,
+  View
 } from "react-native";
-import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const RecipeDetailScreen = () => {
@@ -60,10 +60,14 @@ const RecipeDetailScreen = () => {
         <Text style={styles.sectionTitle}>Ingredients:</Text>
         <Text style={styles.ingredients}>{recipe.ingredients}</Text>
 
-        <View style={{ marginTop: 30 }}>
-          <Button title="Edit Recipe" onPress={handleEdit} />
-          <View style={{ marginVertical: 10 }} />
-          <Button title="Delete Recipe" onPress={handleDelete} color="red" />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleEdit}>
+            <Text style={styles.buttonText}>Edit Recipe</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={handleDelete}>
+            <Text style={styles.buttonText}>Delete Recipe</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -73,11 +77,11 @@ const RecipeDetailScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#1B4217",
+    backgroundColor: "#F8F1E4",
     padding: 20
   },
   card: {
-    backgroundColor: "#F0EAD2",
+    backgroundColor: "#FFF9E8",
     borderRadius: 20,
     padding: 20,
     elevation: 5,
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#1B4217",
+    color: "#3C3C3C",
     marginBottom: 15,
     textAlign: "center"
   },
@@ -109,6 +113,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: "#333"
+  },
+  buttonContainer: {
+    marginTop: 30,
+    gap: 15
+  },
+  button: {
+    backgroundColor: "#FFB84D",
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center"
+  },
+  buttonText: {
+    color: "#1B4217",
+    fontSize: 16,
+    fontWeight: "600"
   }
 });
 
