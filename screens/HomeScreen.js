@@ -65,11 +65,11 @@ const HomeScreen = () => {
 
   const filteredRecipes = recipes.filter(recipe => {
     const search = searchTerm.trim().toLowerCase();
-    return (
-      recipe.title.toLowerCase().includes(search) ||
-      recipe.category?.toLowerCase().includes(search)
-    );
+    const title = recipe?.title?.toLowerCase() || "";
+    const category = recipe?.category?.toLowerCase() || "";
+    return title.includes(search) || category.includes(search);
   });
+  
   
 
   return (
