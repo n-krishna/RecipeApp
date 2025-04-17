@@ -23,12 +23,6 @@ const AddRecipeScreen = ({ navigation }) => {
       Alert.alert("All fields are required (except image).");
       return;
     }
-    const { editEvent } = useEvent();
-
-const handleEdit = () => {
-  const updatedEvent = { title, description, date };
-  editEvent(eventId, updatedEvent);
-};
 
     try {
       await addDoc(collection(db, 'recipes'), {

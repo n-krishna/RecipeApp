@@ -39,7 +39,7 @@ const EditRecipeScreen = () => {
         category: category || ''
       });
       Alert.alert('Recipe updated!');
-      navigation.goBack();
+      navigation.navigate("Home"); // Navigate to HomeScreen after update
     } catch (error) {
       console.error("Error updating recipe:", error);
       Alert.alert('Failed to update recipe.');
